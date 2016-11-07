@@ -142,10 +142,16 @@ namespace lonlife{
             if(total_hops <= 0){
                 return false;
             }
+
             if(size < (sizeof(msghdr) + total_hops * sizeof(ip_pair))){
                 return false;
             }
-            if(msg->cur_hops >= msg->tot_hops){
+
+            if((msg->cur_hops > msg->tot_hops) && (msg->dir == dir_down)){
+                return false;
+            }
+
+            if((msg->cur_hops >= msg->tot_hops) && (msg->dir == dir_up)){
                 return false;
             }
             return true;
