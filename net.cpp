@@ -257,6 +257,12 @@ namespace lonlife{
             ip.id(ip_id++);
             auto pkt = ip / udp / pdu;
             auto data = pkt.serialize();
+	    src.sin_family = AF_INET;
+	    int err = bind(raw_fd, (sockaddr*)&src, sizeof(sockaddr_in));
+	    if (err != 0){
+		perror("Bind raw socket");
+	        return;
+	    }
             ssize_t s = sendto(raw_fd, data.data(), data.size(), 0, (sockaddr*)&remote, sizeof(sockaddr_in));
             if(s <= 0){
                 char buff[256];
